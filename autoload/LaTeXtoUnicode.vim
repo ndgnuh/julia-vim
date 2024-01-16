@@ -3,6 +3,10 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:L2U_Setup()
+  let b:l2u_did_buffer_setup = get(b:, "l2u_did_buffer_setup", 0)
+  if b:l2u_did_buffer_setup
+    return ''
+  endif
 
   call s:L2U_SetupGlobal()
 
@@ -28,7 +32,8 @@ function! s:L2U_Setup()
   let b:l2u_tab_completing = 0
   " Are we calling the tab fallback?
   let b:l2u_in_fallback = 0
-
+  " Do not call setup the second time
+  let b:l2u_did_buffer_setup = 1
 endfunction
 
 function! s:L2U_SetupGlobal()
@@ -96,19 +101,10 @@ function! LaTeXtoUnicode#Refresh()
   endif
 endfunction
 
-" This function is used to setup and enable L2U directly
-" The guard to load or not is defined in the ftplugin instead
-function! LaTeXtoUnicode#Initialize()
-  call s:L2U_Setup()
-  " skip if manually overridden
-  if !b:l2u_autodetect_enable
-    return ''
-  endif
-  call LaTeXtoUnicode#Enable(1)
-endfunction
 
 function! LaTeXtoUnicode#Enable(...)
   let auto_set = a:0 > 0 ? a:1 : 0
+  call s:L2U_Setup()
 
   if b:l2u_enabled
     return ''
@@ -743,8 +739,6 @@ function! LaTeXtoUnicode#Init(...)
     augroup END
   endif
 
-  call s:L2U_Setup()
-
   call s:L2U_UnsetTab()
   call s:L2U_UnsetAutoSub()
   call s:L2U_UnsetKeymap()
@@ -752,12 +746,6 @@ function! LaTeXtoUnicode#Init(...)
   call s:L2U_SetTab(wait_insert_enter)
   call s:L2U_SetAutoSub(wait_insert_enter)
   call s:L2U_SetKeymap()
-
-  " enable or not, skip if manually overridden
-  if !b:l2u_autodetect_enable
-    return ''
-  endif
-  call LaTeXtoUnicode#Enable(1)
 
   return ''
 endfunction

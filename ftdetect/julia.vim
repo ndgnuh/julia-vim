@@ -15,7 +15,7 @@ let s:l2u_patterns = get(g:, "latex_to_unicode_file_types", "*.jl,*.jmd")
 function! s:L2UTrigger()
   augroup L2UInit
     autocmd!
-    execute 'autocmd InsertEnter ' . s:l2u_patterns . ' let g:did_insert_enter = 1 | call LaTeXtoUnicode#Init(0)'
+    execute 'autocmd InsertEnter ' . s:l2u_patterns . ' let g:did_insert_enter = 1 | call LaTeXtoUnicode#Enable()'
   augroup END
 endfunction
 execute 'autocmd BufEnter ' . s:l2u_patterns . ' call s:L2UTrigger()'
