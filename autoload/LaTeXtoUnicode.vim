@@ -100,7 +100,6 @@ endfunction
 " The guard to load or not is defined in the ftplugin instead
 function! LaTeXtoUnicode#Initialize()
   call s:L2U_Setup()
-
   " skip if manually overridden
   if !b:l2u_autodetect_enable
     return ''
@@ -735,6 +734,7 @@ endfunction
 
 " Initialization. Can be used to re-init when global settings have changed.
 function! LaTeXtoUnicode#Init(...)
+
   let wait_insert_enter = a:0 > 0 ? a:1 : 1
 
   if !wait_insert_enter
@@ -743,6 +743,8 @@ function! LaTeXtoUnicode#Init(...)
     augroup END
   endif
 
+  call s:L2U_Setup()
+
   call s:L2U_UnsetTab()
   call s:L2U_UnsetAutoSub()
   call s:L2U_UnsetKeymap()
@@ -750,6 +752,13 @@ function! LaTeXtoUnicode#Init(...)
   call s:L2U_SetTab(wait_insert_enter)
   call s:L2U_SetAutoSub(wait_insert_enter)
   call s:L2U_SetKeymap()
+
+  " enable or not, skip if manually overridden
+  if !b:l2u_autodetect_enable
+    return ''
+  endif
+  call LaTeXtoUnicode#Enable(1)
+
   return ''
 endfunction
 
