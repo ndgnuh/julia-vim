@@ -3,6 +3,10 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:L2U_Setup()
+  let b:l2u_did_buffer_setup = get(b:, "l2u_did_buffer_setup", 0)
+  if b:l2u_did_buffer_setup
+    return ''
+  endif
 
   call s:L2U_SetupGlobal()
 
@@ -28,7 +32,8 @@ function! s:L2U_Setup()
   let b:l2u_tab_completing = 0
   " Are we calling the tab fallback?
   let b:l2u_in_fallback = 0
-
+  " Do not call setup the second time
+  let b:l2u_did_buffer_setup = 1
 endfunction
 
 function! s:L2U_SetupGlobal()
@@ -96,8 +101,10 @@ function! LaTeXtoUnicode#Refresh()
   endif
 endfunction
 
+
 function! LaTeXtoUnicode#Enable(...)
   let auto_set = a:0 > 0 ? a:1 : 0
+  call s:L2U_Setup()
 
   if b:l2u_enabled
     return ''
@@ -723,6 +730,7 @@ endfunction
 
 " Initialization. Can be used to re-init when global settings have changed.
 function! LaTeXtoUnicode#Init(...)
+
   let wait_insert_enter = a:0 > 0 ? a:1 : 1
 
   if !wait_insert_enter
@@ -738,6 +746,7 @@ function! LaTeXtoUnicode#Init(...)
   call s:L2U_SetTab(wait_insert_enter)
   call s:L2U_SetAutoSub(wait_insert_enter)
   call s:L2U_SetKeymap()
+
   return ''
 endfunction
 
