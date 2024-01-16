@@ -96,6 +96,18 @@ function! LaTeXtoUnicode#Refresh()
   endif
 endfunction
 
+" This function is used to setup and enable L2U directly
+" The guard to load or not is defined in the ftplugin instead
+function! LaTeXtoUnicode#Initialize()
+  call s:L2U_Setup()
+
+  " skip if manually overridden
+  if !b:l2u_autodetect_enable
+    return ''
+  endif
+  call LaTeXtoUnicode#Enable(1)
+endfunction
+
 function! LaTeXtoUnicode#Enable(...)
   let auto_set = a:0 > 0 ? a:1 : 0
 
