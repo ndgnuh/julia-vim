@@ -8,22 +8,22 @@ endif
 autocmd BufRead,BufNewFile *.jl      set filetype=julia
 
 " Use latex to unicode on these pattern only
-let s:l2u_pattern = get(g:, "latex_to_unicode_pattern", "*.jl,*.jmd")
+let s:l2u_patterns = get(g:, "latex_to_unicode_patterns", "*.jl,*.jmd")
 
-autocmd FileType s:l2u_pattern                   call LaTeXtoUnicode#Refresh()
-autocmd BufNew s:l2u_pattern                     call LaTeXtoUnicode#Refresh()
-autocmd BufEnter s:l2u_pattern                   call LaTeXtoUnicode#Refresh()
-autocmd CmdwinEnter s:l2u_pattern                call LaTeXtoUnicode#Refresh()
+execute 'autocmd FileType ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
+execute 'autocmd BufNew ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
+execute 'autocmd BufEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
+execute 'autocmd CmdwinEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
 
 " This autocommand is used to postpone the first initialization of LaTeXtoUnicode as much as possible,
 " by calling LaTeXtoUnicode#SetTab and LaTeXtoUnicode#SetAutoSub only at InsertEnter or later
 function! s:L2UTrigger()
   augroup L2UInit
     autocmd!
-    autocmd InsertEnter s:l2u_pattern            let g:did_insert_enter = 1 | call LaTeXtoUnicode#Init(0)
+    execute 'autocmd InsertEnter ' . s:l2u_patterns . ' let g:did_insert_enter = 1 | call LaTeXtoUnicode#Init(0)'
   augroup END
 endfunction
-autocmd BufEnter s:l2u_pattern                   call s:L2UTrigger()
+execute 'autocmd BufEnter ' . s:l2u_patterns . ' call s:L2UTrigger()'
 
 function! s:HighlightJuliaMarkdown()
   if !exists('g:markdown_fenced_languages')
