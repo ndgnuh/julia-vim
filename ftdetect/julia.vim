@@ -10,10 +10,10 @@ autocmd BufRead,BufNewFile *.jl      set filetype=julia
 " Use latex to unicode on these pattern only
 let s:l2u_patterns = get(g:, "latex_to_unicode_patterns", "*.jl,*.jmd")
 
-execute 'autocmd FileType ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
-execute 'autocmd BufNew ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
-execute 'autocmd BufEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
-execute 'autocmd CmdwinEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Refresh()'
+execute 'autocmd FileType ' . s:l2u_patterns . ' call LaTeXtoUnicode#Enable()'
+execute 'autocmd BufNew ' . s:l2u_patterns . ' call LaTeXtoUnicode#Enable()'
+execute 'autocmd BufEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Enable()'
+execute 'autocmd CmdwinEnter ' . s:l2u_patterns . ' call LaTeXtoUnicode#Enable()'
 
 " This autocommand is used to postpone the first initialization of LaTeXtoUnicode as much as possible,
 " by calling LaTeXtoUnicode#SetTab and LaTeXtoUnicode#SetAutoSub only at InsertEnter or later
